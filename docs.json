@@ -123,5 +123,8 @@
       "github": "https://github.com/mintlify",
       "linkedin": "https://linkedin.com/company/mintlify"
     }
-  }
+  },
+  "styling" : {
+    "eyebrows": "breadcrumbs"
+  } 
 }
