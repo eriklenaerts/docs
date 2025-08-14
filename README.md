@@ -43,3 +43,10 @@ Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/sett
 
 - [Mintlify documentation](https://mintlify.com/docs)
 - [Mintlify community](https://mintlify.com/community)
+
+<img
+  src="/images/hero-dark.png"
+  alt="Hero Dark Pn"
+  title="Hero Dark Pn"
+  style={{ width:"68%" }}
+/>
