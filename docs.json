@@ -17,12 +17,11 @@
             "group": "Getting started",
             "pages": [
               "index",
-              "quickstart",
-              "development"
+              "quickstart"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Manuals",
             "pages": [
               "essentials/settings",
               "essentials/navigation"
@@ -35,14 +34,6 @@
               "essentials/code",
               "essentials/images",
               "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
             ]
           }
         ]
@@ -98,12 +89,7 @@
         "label": "Support",
         "href": "mailto:hi@mintlify.com"
       }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
+    ]
   },
   "contextual": {
     "options": [
