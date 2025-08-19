@@ -1,116 +1,152 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "theme": "maple",
+  "name": "Stream Software docs",
+  "description": "Documentation for Stream Software products and services.",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#044eb6",
+    "light": "#0095f2",
+    "dark": "#263372"
   },
   "favicon": "/favicon.svg",
+  "integrations": {
+    "telemetry": {
+      "enabled": true
+    }
+  },
   "navigation": {
-    "tabs": [
+    "dropdowns": [
       {
-        "tab": "Guides",
-        "groups": [
+        "dropdown": "Streamliner Classic",
+        "icon": "book-copy",
+        "tabs": [
           {
-            "group": "Getting started",
-            "pages": [
-              "index",
-              "quickstart"
+            "tab": "Streamliner Customs",
+            "groups": [
+              {
+                "group": "Getting started",
+                "pages": ["classic/customs/index"]
+              },
+              {
+                "group": "Guides",
+                "pages": [
+                  "classic/customs/guides/guide-x",
+                  "classic/customs/guides/guide-y",
+                  {
+                    "group": "Manuals",
+                    "icon": "book",
+                    "pages": [
+                      "classic/customs/guides/manual-1",
+                      "classic/customs/guides/manual-2"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Modules",
+                "tag": "NEW",
+                "pages": [
+                  "classic/customs/modules/module-a",
+                  "classic/customs/modules/module-b",
+                  "classic/customs/modules/module-c"
+                ]
+              },
+              {
+                "group": "Release notes",
+                "pages": ["classic/customs/updates"]
+              }
             ]
           },
           {
-            "group": "Manuals",
-            "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+            "tab": "Integrated Logistics Streamliner",
+            "groups": [
+              {
+                "group": "Getting started",
+                "pages": ["classic/ils/index"]
+              },
+              {
+                "group": "Modules",
+                "tag": "NEW",
+                "pages": ["classic/ils/modules/module a"]
+              }
             ]
           },
           {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+            "tab": "API reference",
+            "groups": [
+              {
+                "group": "Getting started",
+                "pages": ["classic/api/introduction"]
+              },
+              {
+                "group": "API reference",
+                "openapi": "classic/api/openapi.json",
+                "pages": [
+                  "classic/api/endpoint/create",
+                  "classic/api/endpoint/get",
+                  "classic/api/endpoint/webhook",
+                  "classic/api/endpoint/delete"
+                ]
+              },
+              {
+                "group": "API reference",
+                "openapi": "classic/api/openapi.json",
+                "pages": [
+                  "overview",
+                  "authentication",
+                  "GET /plants",
+                  "POST /plants",
+                  {
+                    "group": "Products",
+                    "openapi": "classic/api/openapi.json",
+                    "pages": ["GET /plants", "POST /plants"]
+                  }
+                ]
+              }
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
-        "groups": [
+        "dropdown": "Streamliner Cloud",
+        "icon": "book-copy",
+        "tabs": [
           {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
-            ]
+            "tab": "Consignment",
+            "icon": "box",
+            "pages": ["cloud/consignment/index"]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/light.png",
+    "dark": "/logo/dark.png"
   },
   "navbar": {
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:support@streamsoftware.be"
       }
     ]
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt"
+    ]
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "linkedin": "https://www.linkedin.com/company/stream-software/",
+      "facebook": "https://www.facebook.com/StreamSoftwareNV",
+      "instagram": "https://www.instagram.com/streamsoftware/"
     }
   },
-  "styling" : {
+  "styling": {
     "eyebrows": "breadcrumbs"
-  } 
+  }
 }
