@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "maple",
+  "theme": "willow",
   "name": "Stream Software docs",
   "description": "Documentation for Stream Software products and services.",
   "colors": {
@@ -37,7 +37,8 @@
                     "icon": "book",
                     "pages": [
                       "classic/customs/guides/manual-1",
-                      "classic/customs/guides/manual-2"
+                      "classic/customs/guides/manual-2",
+                      "classic/customs/guides/manual-3"
                     ]
                   }
                 ]
@@ -49,6 +50,14 @@
                   "classic/customs/modules/module-a",
                   "classic/customs/modules/module-b",
                   "classic/customs/modules/module-c"
+                ]
+              },
+              {
+                "group": "Components",
+                "tag": "",
+                "pages": [
+                  "classic/customs/components/MenuTrail",
+                  "classic/customs/components/Shortcut"
                 ]
               },
               {
@@ -133,11 +142,7 @@
     ]
   },
   "contextual": {
-    "options": [
-      "copy",
-      "view",
-      "chatgpt"
-    ]
+    "options": []
   },
   "footer": {
     "socials": {
@@ -147,6 +152,6 @@
     }
   },
   "styling": {
-    "eyebrows": "breadcrumbs"
+    "eyebrows": "section"
   }
 }

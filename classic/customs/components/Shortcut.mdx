@@ -1,0 +1,123 @@
+---
+title: "Keyboard shortcuts"
+description: "Displays the keyboard shortcut in an attractive visual"
+icon: "keyboard"
+---
+
+import { Shortcut } from "/snippets/Shortcut.jsx";
+
+Use the `Shortcut` to showcase a keyboard shortcut combination. This visual representation is much more attractive and speeds up the search for the keyboard shortcut the want to find. 
+
+<Shortcut combo="Ctrl+E" platform="win" />
+
+
+## Highlights
+- use one or more keyboard combo's
+- choose between names or symbols
+- OS specific symbols
+- detects the OS automatically
+- inline or in block mode.
+
+## Prerequisites
+
+Add the following to the top of your MDX page
+```jsx
+import { Shortcut } from "/snippets/Shortcut.jsx";
+```
+
+## Examples
+
+Auto display symbols or names based on the OS detection.
+
+<Shortcut combo="Cmd+Shift+P"  />
+
+Show always `names` and a `lg` size
+
+<Shortcut combo="Cmd+Shift+P" display="names" size="lg" />
+
+Show always `symbols` in a `sm` size
+
+<Shortcut combo="Ctrl+K, Ctrl+S" display="symbols" size="sm" />
+
+Show `names` in a `block` with `title` and specific for `mac` OS
+
+<Shortcut mode="block" title="Keyboard Shortcut" combo="Cmd+/" display="names" platform="mac"  />
+
+`block` without a title specific for `win` OS
+
+<Shortcut mode="block" combo="Ctrl+Shift+N" platform="win" />
+
+## Syntax
+```MDX
+<Shortcut 
+  combo="Cmd+Shift+P" 
+  platform="auto|mac|win|linux" 
+  mode="inline|block"
+  display="auto|names|symbols" 
+  joiner=" + "
+  stepJoiner=", then "
+  size="sm|md|lg"
+  />
+```
+## Parameters 
+
+<ParamField path="combo" type="string | string[]" required>
+  The keyboard shortcut(s). 
+  
+  Accepts a single combo like `"Ctrl+K"` or a multi-step sequence like `"Ctrl+K, Ctrl+S"`. Arrays are also supported: `["Ctrl+K", "Ctrl+S"]`.
+</ParamField> 
+
+<ParamField
+  path="mode"
+  type='"inline" | "block"'
+  default="inline"
+>
+  Visual style. 
+  - `inline` renders compact keycaps in-line with text. 
+  - `block` wraps the keys in a frame with optional `title`.
+</ParamField> 
+
+<ParamField path="title" type="string">
+  Optional title shown when `mode="block"`. 
+  
+  If omitted or empty, the header bar is hidden and the copy button floats at top-right.
+</ParamField> 
+
+<ParamField
+  path="platform"
+  type='"auto" | "mac" | "win" | "linux"'
+  default="auto"
+>
+  Platform mapping. 
+  - `auto` detects the user agent (mac ⇒ mac symbols, otherwise Windows/Linux
+  naming). 
+  - Override to force a platform.
+</ParamField> 
+
+<ParamField
+  path="display"
+  type='"auto" | "symbols" | "names"'
+  default="auto"
+>
+  What to display inside keycaps. 
+  - `auto`: mac shows symbols (⌘ ⌥ ⇧), others show names (Ctrl Alt Shift) 
+  - `symbols`: always prefer symbols (falls back to names where unavailable) 
+  - `names`: always textual names (Cmd / Option / Ctrl / Shift)
+</ParamField> 
+
+<ParamField path="joiner" type="string" default=' + '>
+  Separator between keys within a single step (e.g., `Ctrl + K`).
+</ParamField> 
+
+<ParamField path="stepJoiner" type="string" default=', then '>
+  Separator between multiple steps (e.g., `Ctrl+K, then Ctrl+S`).
+</ParamField> 
+
+<ParamField path="size" type='"sm" | "md" | "lg"' default="md">
+  Keycap size. 
+  
+  `sm` matches tiny mac-style glyph samples; `lg` for callouts.
+</ParamField>
+
+
+

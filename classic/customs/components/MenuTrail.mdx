@@ -1,0 +1,129 @@
+---
+title: "Menu Trail"
+description: "Displays a path users need to follow in a menu or navigation."
+icon: "bars-staggered"
+---
+
+import { MenuTrail } from "/snippets/MenuTrail.jsx";
+
+Use a `MenuTrail` to present a menu navigation for a users, like open menu, then submenu y and select z. You can either present it inline <MenuTrail segments="ILS, Getting started, Overview" icon="bars-staggered" iconStyle="duotone" mode="inline" />
+or as a separate code block:
+
+<MenuTrail segments="ILS, Getting started, Overview" icon="bars-staggered" iconStyle="duotone" mode="block" title="Navigate to..."/>
+
+## Highlights
+- Works with a comma-separated string or an array of segments  
+- Smart defaults per mode (inline vs. block)  
+- Optional leading icon (defaults to `bars-staggered`) with automatic style per mode  
+- Accessible: screen-reader label for the icon
+
+## Prerequisites
+
+Add the following to the top of your MDX page
+```jsx
+import { MenuTrail } from '@/snippets/MenuTrail'
+```
+
+## Examples
+
+Show the `MenuTrail` component with only the segments of the trail. You'll see defaults in action like the icon, its style and mode.
+
+Default usage, with only the `segments` provided
+
+<MenuTrail segments="Settings, Billing, Invoices"/>
+
+Minimalistic version with `icon` and `emphasise` turned off
+
+<MenuTrail segments="Settings, Billing, Invoices" emphasise="none" icon={false}/>
+
+With a `house` icon and style `light` style
+
+<MenuTrail icon="house" iconStyle="light" segments="Settings, Billing, Invoices"/>
+
+Shown as a `block` with a `title` in a `lg` size
+
+<MenuTrail icon="house" iconStyle="duotone" mode="block" size="lg" title="Navigate to" segments="Settings, Billing, Invoices"/>
+
+## Syntax
+
+```MDX
+<MenuTrail
+  mode="block"
+  title="Navigate to"
+  icon="bars-staggered"
+  iconStyle="light"
+  iconLabel="menu"
+  joiner="|"
+  size="sm|md|lg"
+  emphasise="bold|pill|none"
+  segments="Settings, Billing, Invoices"
+/>
+```
+
+## Parameters
+
+These are the options youu can use with the MenuTrail component:
+
+<ParamField path="segments" type="string | string[]" required>
+  The path segments, in order. 
+  
+  You can pass a comma-separated string (`"Settings,Billing, Invoices"`) or an array (`["Settings","Billing","Invoices"]`).
+</ParamField> 
+
+<ParamField path="mode" type='"inline" | "block"' default="inline">
+  Visual style.
+  
+  - `block` renders in a Mintlify code-block frame (with optional title bar). 
+  - `inline` renders a compact pill with a light border (no frame).
+</ParamField> 
+
+<ParamField path="title" type="string">
+  Optional title shown only when <code>mode="block"</code>. 
+  
+  If omitted/empty, the header bar is hidden and the copy button floats in the top-right
+</ParamField> 
+
+<ParamField path="joiner" type="string" default=">">
+  The character(s) used between segments (e.g., <code>></code>, <code>&gt;</code>, <code>/</code>, <code>→</code>).
+</ParamField> 
+
+<ParamField path="size" type='"sm" | "md" | "lg"' default="sm|md">
+  Scales text and padding of the path (and spacing around the joiner).
+
+  - Inline mode it defaults to `sm`
+  - Block mode it defaults to `md`
+
+</ParamField> 
+
+<ParamField path="icon" type="string" default="bars-staggered">
+  If provided, shows a [Font Awensome icon](https://fontawesome.com/search) **before** the first segment.
+
+  For example `house` or `bars`
+</ParamField> 
+
+<ParamField
+  path="iconStyle"
+  type="string"
+  default="solid"
+  values="c"
+>
+  The Mintlify icon style (same set used by <code>&lt;Icon /&gt;</code>). 
+  
+  Options: `regular`, `solid`, `light`, `thin`, `sharp-solid`, `duotone`, `brands`.
+  
+  <small>
+    Other styles may exist depending on CDN availability; <code>solid</code> and <code>brands</code> are the most common.
+  </small>
+</ParamField> 
+
+<ParamField path="iconLabel" type="string" default="Menu">
+  Text label used for screen readers.
+</ParamField>
+
+<ParamField path="emphasise" type="string" default="pill">
+  Highlights the last segment, as this is typically the final target item in the trail. 
+
+  - bold: font-semibold (default for inline mode)
+  - pill: subtle rounded background (default for block mode)
+  - none: no emphasis at all
+</ParamField>
