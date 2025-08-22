@@ -36,9 +36,7 @@
                     "group": "Manuals",
                     "icon": "book",
                     "pages": [
-                      "classic/customs/guides/manual-1",
-                      "classic/customs/guides/manual-2",
-                      "classic/customs/guides/manual-3"
+                      "classic/customs/guides/manual-1"
                     ]
                   }
                 ]
