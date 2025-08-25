@@ -1,23 +1,41 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.1.0",
   "info": {
     "title": "NCTS Integration API",
-    "version": "v1"
+    "contact": {},
+    "version": "1.0.0"
   },
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "servers": [
+    {
+      "url": "https://{defaultHost}",
+      "variables": {
+        "defaultHost": {
+          "default": "www.example.com"
+        }
+      }
+    },
+    {
+      "url": "https://localhost:5002/connect",
+      "variables": {}
+    }
+  ],
   "paths": {
     "/batch/departures/{reference}": {
       "put": {
         "tags": [
           "Batch"
         ],
-        "summary": "Upsert NCTS departure data",
+        "summary": "batch-departure",
         "description": "Add or update data for NCTS departure. Data will be imported into StreamLiner by the batch processor.",
         "operationId": "batch-departure",
         "parameters": [
           {
             "name": "reference",
             "in": "path",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
               "type": "string"
             }
@@ -25,32 +43,53 @@
           {
             "name": "X-Tenant-Id",
             "in": "header",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
               "type": "string"
             }
           }
         ],
         "requestBody": {
+          "description": "",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Departure"
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Departure"
+                  },
+                  {}
+                ],
+                "contentMediaType": "application/json"
               }
             }
-          }
+          },
+          "required": false
         },
         "responses": {
           "202": {
             "description": "Accepted",
             "headers": {
               "Location": {
-                "description": "The location where you can monitor the status of the batch processor job"
+                "description": "The location where you can monitor the status of the batch processor job",
+                "content": {
+                  "text/plain": {
+                    "schema": {
+                      "type": "string",
+                      "description": "The location where you can monitor the status of the batch processor job",
+                      "contentMediaType": "text/plain"
+                    }
+                  }
+                }
               }
-            }
+            },
+            "content": {}
           },
           "400": {
             "description": "Bad Request",
+            "headers": {},
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -61,6 +100,7 @@
           },
           "409": {
             "description": "Conflict",
+            "headers": {},
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -71,27 +111,32 @@
                     {
                       "$ref": "#/components/schemas/HttpValidationProblemDetails"
                     }
-                  ]
+                  ],
+                  "contentMediaType": "application/problem+json"
                 }
               }
             }
           }
-        }
-      }
+        },
+        "deprecated": false
+      },
+      "parameters": []
     },
     "/batch/arrivals/{reference}": {
       "put": {
         "tags": [
           "Batch"
         ],
-        "summary": "Upsert NCTS arrival data",
+        "summary": "batch-arrival",
         "description": "Add or update data for NCTS arrival. Data will be imported into StreamLiner by the batch processor.",
         "operationId": "batch-arrival",
         "parameters": [
           {
             "name": "reference",
             "in": "path",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
               "type": "string"
             }
@@ -99,32 +144,53 @@
           {
             "name": "X-Tenant-Id",
             "in": "header",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
               "type": "string"
             }
           }
         ],
         "requestBody": {
+          "description": "",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Arrival"
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Arrival"
+                  },
+                  {}
+                ],
+                "contentMediaType": "application/json"
               }
             }
-          }
+          },
+          "required": false
         },
         "responses": {
           "202": {
             "description": "Accepted",
             "headers": {
               "Location": {
-                "description": "The location where you can monitor the status of the batch processor job"
+                "description": "The location where you can monitor the status of the batch processor job",
+                "content": {
+                  "text/plain": {
+                    "schema": {
+                      "type": "string",
+                      "description": "The location where you can monitor the status of the batch processor job",
+                      "contentMediaType": "text/plain"
+                    }
+                  }
+                }
               }
-            }
+            },
+            "content": {}
           },
           "400": {
             "description": "Bad Request",
+            "headers": {},
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -135,6 +201,7 @@
           },
           "409": {
             "description": "Conflict",
+            "headers": {},
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -145,36 +212,43 @@
                     {
                       "$ref": "#/components/schemas/HttpValidationProblemDetails"
                     }
-                  ]
+                  ],
+                  "contentMediaType": "application/problem+json"
                 }
               }
             }
           }
-        }
-      }
+        },
+        "deprecated": false
+      },
+      "parameters": []
     },
     "/batch/feedback/{id}": {
       "get": {
         "tags": [
           "Batch"
         ],
-        "summary": "Get batch processing feedback",
+        "summary": "batch-feedback",
         "description": "Get feedback on the processing state of the upserted data by the batch processor.",
         "operationId": "batch-feedback",
         "parameters": [
           {
             "name": "id",
             "in": "path",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
               "type": "integer",
-              "format": "int64"
+              "contentEncoding": "int64"
             }
           },
           {
             "name": "X-Tenant-Id",
             "in": "header",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
               "type": "string"
             }
@@ -183,6 +257,7 @@
         "responses": {
           "200": {
             "description": "OK",
+            "headers": {},
             "content": {
               "application/json": {
                 "schema": {
@@ -193,6 +268,7 @@
           },
           "404": {
             "description": "Not Found",
+            "headers": {},
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -203,13 +279,15 @@
                     {
                       "$ref": "#/components/schemas/HttpValidationProblemDetails"
                     }
-                  ]
+                  ],
+                  "contentMediaType": "application/problem+json"
                 }
               }
             }
           },
           "429": {
             "description": "Too Many Requests",
+            "headers": {},
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -220,34 +298,42 @@
                     {
                       "$ref": "#/components/schemas/HttpValidationProblemDetails"
                     }
-                  ]
+                  ],
+                  "contentMediaType": "application/problem+json"
                 }
               }
             }
           }
-        }
-      }
+        },
+        "deprecated": false
+      },
+      "parameters": []
     },
     "/declarations": {
       "get": {
         "tags": [
           "Declarations"
         ],
-        "summary": "Find NCTS declaration",
+        "summary": "declarations-find",
         "description": "Find a NCTS declaration by company code or reference number",
         "operationId": "declarations-find",
         "parameters": [
           {
-            "name": "reference",
-            "in": "query",
+            "name": "X-Tenant-Id",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "style": "simple",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "X-Tenant-Id",
-            "in": "header",
-            "required": true,
+            "name": "reference",
+            "in": "query",
+            "description": "",
+            "style": "form",
+            "explode": true,
             "schema": {
               "type": "string"
             }
@@ -256,19 +342,23 @@
         "responses": {
           "200": {
             "description": "OK",
+            "headers": {},
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/FoundDeclarations"
-                  }
+                  },
+                  "description": "",
+                  "contentMediaType": "application/json"
                 }
               }
             }
           },
           "400": {
             "description": "Bad Request",
+            "headers": {},
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -277,21 +367,26 @@
               }
             }
           }
-        }
-      }
+        },
+        "deprecated": false
+      },
+      "parameters": []
     },
     "/declarations/{declarationNumber}/feedback": {
       "get": {
         "tags": [
           "Declarations"
         ],
-        "summary": "Get declaration feedback",
+        "summary": "declarations-feedback",
+        "description": "",
         "operationId": "declarations-feedback",
         "parameters": [
           {
             "name": "declarationNumber",
             "in": "path",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
               "type": "string"
             }
@@ -299,7 +394,9 @@
           {
             "name": "X-Tenant-Id",
             "in": "header",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
               "type": "string"
             }
@@ -308,19 +405,23 @@
         "responses": {
           "200": {
             "description": "OK",
+            "headers": {},
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/DeclarationFeedback"
-                  }
+                  },
+                  "description": "",
+                  "contentMediaType": "application/json"
                 }
               }
             }
           },
           "404": {
             "description": "Not Found",
+            "headers": {},
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -331,13 +432,15 @@
                     {
                       "$ref": "#/components/schemas/HttpValidationProblemDetails"
                     }
-                  ]
+                  ],
+                  "contentMediaType": "application/problem+json"
                 }
               }
             }
           },
           "429": {
             "description": "Too Many Requests",
+            "headers": {},
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -348,27 +451,32 @@
                     {
                       "$ref": "#/components/schemas/HttpValidationProblemDetails"
                     }
-                  ]
+                  ],
+                  "contentMediaType": "application/problem+json"
                 }
               }
             }
           }
-        }
-      }
+        },
+        "deprecated": false
+      },
+      "parameters": []
     },
     "/declarations/{declarationNumber}/attachments": {
       "post": {
         "tags": [
           "Declarations"
         ],
-        "summary": "Upload attachment",
+        "summary": "declarations-add-attachment",
         "description": "Attach a file to a declaration.",
         "operationId": "declarations-add-attachment",
         "parameters": [
           {
             "name": "declarationNumber",
             "in": "path",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
               "type": "string"
             }
@@ -376,7 +484,9 @@
           {
             "name": "Content-Disposition",
             "in": "header",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
               "type": "string"
             }
@@ -384,7 +494,9 @@
           {
             "name": "Attachment-Type",
             "in": "header",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
               "type": "string"
             }
@@ -392,44 +504,72 @@
           {
             "name": "Attachment-Reference",
             "in": "header",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Tenant-Id",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "const": "application/octet-stream",
               "type": "string"
             }
           },
           {
             "name": "Attachment-Date",
             "in": "header",
+            "description": "",
+            "style": "simple",
             "schema": {
               "type": "string",
-              "format": "date"
-            }
-          },
-          {
-            "name": "X-Tenant-Id",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
+              "contentEncoding": "date"
             }
           }
         ],
         "requestBody": {
           "content": {
-            "application/octet-stream": {
+            "multipart/form-data": {
+              "encoding": {},
               "schema": {
-                "type": "string",
-                "format": "binary"
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "type": "string",
+                    "contentEncoding": "base64"
+                  }
+                },
+                "contentMediaType": "multipart/form-data"
               }
             }
-          }
+          },
+          "required": false
         },
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "Created",
+            "headers": {},
+            "content": {}
           },
           "400": {
             "description": "Bad Request",
+            "headers": {},
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -440,6 +580,7 @@
           },
           "404": {
             "description": "Not Found",
+            "headers": {},
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -450,26 +591,32 @@
                     {
                       "$ref": "#/components/schemas/HttpValidationProblemDetails"
                     }
-                  ]
+                  ],
+                  "contentMediaType": "application/problem+json"
                 }
               }
             }
           }
-        }
-      }
+        },
+        "deprecated": false
+      },
+      "parameters": []
     },
     "/declarations/{declarationNumber}/submit": {
       "put": {
         "tags": [
           "Declarations"
         ],
-        "summary": "Send NCTS declaration to customs",
+        "summary": "declarations-send-declaration",
+        "description": "",
         "operationId": "declarations-send-declaration",
         "parameters": [
           {
             "name": "declarationNumber",
             "in": "path",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
               "type": "string"
             }
@@ -477,27 +624,40 @@
           {
             "name": "X-Tenant-Id",
             "in": "header",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
               "type": "string"
             }
           }
         ],
         "requestBody": {
+          "description": "",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SendOptions"
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/SendOptions"
+                  },
+                  {}
+                ],
+                "contentMediaType": "application/json"
               }
             }
-          }
+          },
+          "required": false
         },
         "responses": {
           "202": {
-            "description": "Accepted"
+            "description": "Accepted",
+            "headers": {},
+            "content": {}
           },
           "400": {
             "description": "Bad Request",
+            "headers": {},
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -508,6 +668,7 @@
           },
           "409": {
             "description": "Conflict",
+            "headers": {},
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -518,26 +679,32 @@
                     {
                       "$ref": "#/components/schemas/HttpValidationProblemDetails"
                     }
-                  ]
+                  ],
+                  "contentMediaType": "application/problem+json"
                 }
               }
             }
           }
-        }
-      }
+        },
+        "deprecated": false
+      },
+      "parameters": []
     },
     "/declarations/{declarationNumber}/presentation-notification": {
       "put": {
         "tags": [
           "Declarations"
         ],
-        "summary": "Send NCTS presentation notification to customs",
+        "summary": "declarations-send-presentation",
+        "description": "",
         "operationId": "declarations-send-presentation",
         "parameters": [
           {
             "name": "declarationNumber",
             "in": "path",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
               "type": "string"
             }
@@ -545,27 +712,40 @@
           {
             "name": "X-Tenant-Id",
             "in": "header",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
               "type": "string"
             }
           }
         ],
         "requestBody": {
+          "description": "",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SendOptions"
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/SendOptions"
+                  },
+                  {}
+                ],
+                "contentMediaType": "application/json"
               }
             }
-          }
+          },
+          "required": false
         },
         "responses": {
           "202": {
-            "description": "Accepted"
+            "description": "Accepted",
+            "headers": {},
+            "content": {}
           },
           "400": {
             "description": "Bad Request",
+            "headers": {},
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -576,6 +756,7 @@
           },
           "409": {
             "description": "Conflict",
+            "headers": {},
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -586,26 +767,32 @@
                     {
                       "$ref": "#/components/schemas/HttpValidationProblemDetails"
                     }
-                  ]
+                  ],
+                  "contentMediaType": "application/problem+json"
                 }
               }
             }
           }
-        }
-      }
+        },
+        "deprecated": false
+      },
+      "parameters": []
     },
     "/declarations/{declarationNumber}/invalidation": {
       "put": {
         "tags": [
           "Declarations"
         ],
-        "summary": "Send NCTS invalidation request to customs",
+        "summary": "declarations-send-invalidation",
+        "description": "",
         "operationId": "declarations-send-invalidation",
         "parameters": [
           {
             "name": "declarationNumber",
             "in": "path",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
               "type": "string"
             }
@@ -613,27 +800,40 @@
           {
             "name": "X-Tenant-Id",
             "in": "header",
+            "description": "",
             "required": true,
+            "style": "simple",
             "schema": {
               "type": "string"
             }
           }
         ],
         "requestBody": {
+          "description": "",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SendOptions"
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/SendOptions"
+                  },
+                  {}
+                ],
+                "contentMediaType": "application/json"
               }
             }
-          }
+          },
+          "required": false
         },
         "responses": {
           "202": {
-            "description": "Accepted"
+            "description": "Accepted",
+            "headers": {},
+            "content": {}
           },
           "400": {
             "description": "Bad Request",
+            "headers": {},
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -644,6 +844,7 @@
           },
           "409": {
             "description": "Conflict",
+            "headers": {},
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -654,24 +855,30 @@
                     {
                       "$ref": "#/components/schemas/HttpValidationProblemDetails"
                     }
-                  ]
+                  ],
+                  "contentMediaType": "application/problem+json"
                 }
               }
             }
           }
-        }
-      }
+        },
+        "deprecated": false
+      },
+      "parameters": []
     }
   },
   "components": {
     "schemas": {
       "ActiveBorderTransportMeans": {
+        "title": "ActiveBorderTransportMeans",
         "type": "object",
         "properties": {
           "typeOfIdentification": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "contentEncoding": "int32"
           },
           "identificationNumber": {
             "type": "string"
@@ -685,10 +892,10 @@
           "customsOfficeAtBorderReferenceNumber": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "AdditionalInformation": {
+        "title": "AdditionalInformation",
         "type": "object",
         "properties": {
           "code": {
@@ -697,10 +904,10 @@
           "text": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "AdditionalReference": {
+        "title": "AdditionalReference",
         "type": "object",
         "properties": {
           "referenceNumber": {
@@ -709,10 +916,10 @@
           "type": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "AdditionalSupplyChainActor": {
+        "title": "AdditionalSupplyChainActor",
         "type": "object",
         "properties": {
           "role": {
@@ -721,37 +928,56 @@
           "identificationNumber": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Arrival": {
+        "title": "Arrival",
         "type": "object",
         "properties": {
-          "$type": {
+          "type": {
             "type": "string",
             "readOnly": true
           },
           "format": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "language": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "declaration": {
-            "$ref": "#/components/schemas/ArrivalDeclaration"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ArrivalDeclaration"
+              },
+              {}
+            ]
           },
           "master": {
-            "$ref": "#/components/schemas/ArrivalMasterConsignment"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ArrivalMasterConsignment"
+              },
+              {}
+            ]
           },
           "integration": {
-            "$ref": "#/components/schemas/IntegrationData"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/IntegrationData"
+              },
+              {}
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "ArrivalDeclaration": {
+        "title": "ArrivalDeclaration",
         "type": "object",
         "properties": {
           "lrn": {
@@ -767,35 +993,53 @@
             "type": "boolean"
           },
           "arrivalNotificationDateTime": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "contentEncoding": "date-time"
           },
           "authorisation": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Authorisation"
-            }
+            },
+            "description": ""
           },
           "customsOfficeOfDestination": {
-            "$ref": "#/components/schemas/CustomsOfficeOfDestination"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CustomsOfficeOfDestination"
+              },
+              {}
+            ]
           },
           "traderAtDestination": {
-            "$ref": "#/components/schemas/TraderAtDestination"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TraderAtDestination"
+              },
+              {}
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "ArrivalMasterConsignment": {
+        "title": "ArrivalMasterConsignment",
         "type": "object",
         "properties": {
           "locationOfGoods": {
-            "$ref": "#/components/schemas/LocationOfGoods"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationOfGoods"
+              },
+              {}
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Attachment": {
+        "title": "Attachment",
         "type": "object",
         "properties": {
           "type": {
@@ -806,7 +1050,7 @@
           },
           "date": {
             "type": "string",
-            "format": "date-time"
+            "contentEncoding": "date-time"
           },
           "filename": {
             "type": "string"
@@ -814,10 +1058,10 @@
           "content": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Authorisation": {
+        "title": "Authorisation",
         "type": "object",
         "properties": {
           "type": {
@@ -826,10 +1070,10 @@
           "referenceNumber": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "BatchJobFeedback": {
+        "title": "BatchJobFeedback",
         "type": "object",
         "properties": {
           "status": {
@@ -839,17 +1083,24 @@
             "type": "string"
           },
           "endedOnDate": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Carrier": {
+        "title": "Carrier",
         "type": "object",
         "properties": {
           "references": {
-            "$ref": "#/components/schemas/RelationReferences"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationReferences"
+              },
+              {}
+            ]
           },
           "name": {
             "type": "string"
@@ -858,16 +1109,26 @@
             "type": "string"
           },
           "contactPerson": {
-            "$ref": "#/components/schemas/CarrierContactPerson"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CarrierContactPerson"
+              },
+              {}
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "CarrierContactPerson": {
+        "title": "CarrierContactPerson",
         "type": "object",
         "properties": {
           "references": {
-            "$ref": "#/components/schemas/RelationReferences"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationReferences"
+              },
+              {}
+            ]
           },
           "name": {
             "type": "string"
@@ -878,23 +1139,22 @@
           "emailAddress": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Charges": {
+        "title": "Charges",
         "type": "object",
         "properties": {
           "code": {
             "type": "string"
           },
           "amount": {
-            "type": "number",
-            "format": "double"
+            "type": "number"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "CommodityCode": {
+        "title": "CommodityCode",
         "type": "object",
         "properties": {
           "harmonizedSystemSubHeadingCode": {
@@ -903,14 +1163,19 @@
           "combinedNomenclatureCode": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Consignee": {
+        "title": "Consignee",
         "type": "object",
         "properties": {
           "references": {
-            "$ref": "#/components/schemas/RelationReferences"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationReferences"
+              },
+              {}
+            ]
           },
           "name": {
             "type": "string"
@@ -919,12 +1184,17 @@
             "type": "string"
           },
           "address": {
-            "$ref": "#/components/schemas/ConsigneeAddress"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ConsigneeAddress"
+              },
+              {}
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "ConsigneeAddress": {
+        "title": "ConsigneeAddress",
         "type": "object",
         "properties": {
           "streetAndNumber": {
@@ -939,14 +1209,19 @@
           "city": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Consignor": {
+        "title": "Consignor",
         "type": "object",
         "properties": {
           "references": {
-            "$ref": "#/components/schemas/RelationReferences"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationReferences"
+              },
+              {}
+            ]
           },
           "name": {
             "type": "string"
@@ -955,15 +1230,25 @@
             "type": "string"
           },
           "address": {
-            "$ref": "#/components/schemas/ConsignorAddress"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ConsignorAddress"
+              },
+              {}
+            ]
           },
           "contactPerson": {
-            "$ref": "#/components/schemas/ConsignorContactPerson"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ConsignorContactPerson"
+              },
+              {}
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "ConsignorAddress": {
+        "title": "ConsignorAddress",
         "type": "object",
         "properties": {
           "streetAndNumber": {
@@ -978,14 +1263,19 @@
           "city": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "ConsignorContactPerson": {
+        "title": "ConsignorContactPerson",
         "type": "object",
         "properties": {
           "references": {
-            "$ref": "#/components/schemas/RelationReferences"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationReferences"
+              },
+              {}
+            ]
           },
           "name": {
             "type": "string"
@@ -996,14 +1286,19 @@
           "emailAddress": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Contact": {
+        "title": "Contact",
         "type": "object",
         "properties": {
           "references": {
-            "$ref": "#/components/schemas/RelationReferences"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationReferences"
+              },
+              {}
+            ]
           },
           "name": {
             "maxLength": 70,
@@ -1015,218 +1310,276 @@
           },
           "emailAddress": {
             "maxLength": 256,
-            "type": "string",
-            "format": "email"
+            "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Control": {
+        "title": "Control",
         "type": "object",
         "properties": {
           "packages": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "contentEncoding": "int32"
           },
           "grossmass": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
+            "type": [
+              "number",
+              "null"
+            ]
           },
           "netmass": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
+            "type": [
+              "number",
+              "null"
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "CountryOfRoutingOfConsignment": {
+        "title": "CountryOfRoutingOfConsignment",
         "type": "object",
         "properties": {
           "country": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "CustomsOffice": {
+        "title": "CustomsOffice",
         "type": "object",
         "properties": {
           "referenceNumber": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "CustomsOfficeOfDeparture": {
+        "title": "CustomsOfficeOfDeparture",
         "type": "object",
         "properties": {
           "referenceNumber": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "CustomsOfficeOfDestination": {
+        "title": "CustomsOfficeOfDestination",
         "type": "object",
         "properties": {
           "referenceNumber": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "CustomsOfficeOfExitForTransit": {
+        "title": "CustomsOfficeOfExitForTransit",
         "type": "object",
         "properties": {
           "referenceNumber": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "CustomsOfficeOfTransit": {
+        "title": "CustomsOfficeOfTransit",
         "type": "object",
         "properties": {
           "referenceNumber": {
             "type": "string"
           },
           "arrivalDateAndTimeEstimated": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "contentEncoding": "date-time"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "CustomsPrincipal": {
+        "title": "CustomsPrincipal",
         "type": "object",
         "properties": {
           "references": {
-            "$ref": "#/components/schemas/RelationReferences"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationReferences"
+              },
+              {}
+            ]
           },
           "contactPerson": {
-            "$ref": "#/components/schemas/Contact"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Contact"
+              },
+              {}
+            ]
           },
           "sendMail": {
             "type": "boolean"
           },
           "contactPersonExportConfirmation": {
-            "$ref": "#/components/schemas/Contact"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Contact"
+              },
+              {}
+            ]
           },
           "sendMailExportConfirmation": {
             "type": "boolean"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "DangerousGoods": {
+        "title": "DangerousGoods",
         "type": "object",
         "properties": {
           "unNumber": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Declaration": {
+        "title": "Declaration",
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
-            "format": "uuid"
+            "contentEncoding": "uuid"
           },
           "number": {
             "type": "string"
           },
           "reference": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "company": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "type": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "status": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "mrn": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "lrn": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "DeclarationFeedback": {
+        "title": "DeclarationFeedback",
         "type": "object",
         "properties": {
           "declaration": {
-            "$ref": "#/components/schemas/Declaration"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Declaration"
+              },
+              {}
+            ]
           },
           "responses": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/DeclarationFeedbackResponse"
-            }
+            },
+            "description": ""
           }
-        },
-        "additionalProperties": false
+        }
       },
       "DeclarationFeedbackResponse": {
+        "title": "DeclarationFeedbackResponse",
         "type": "object",
         "properties": {
           "status": {
             "type": "string"
           },
           "description": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "timestamp": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "contentEncoding": "date-time"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Departure": {
+        "title": "Departure",
         "type": "object",
         "properties": {
-          "$type": {
+          "type": {
             "type": "string",
             "readOnly": true
           },
           "integration": {
-            "$ref": "#/components/schemas/IntegrationData"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/IntegrationData"
+              },
+              {}
+            ]
           },
           "declaration": {
-            "$ref": "#/components/schemas/DepartureDeclaration"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DepartureDeclaration"
+              },
+              {}
+            ]
           },
           "master": {
-            "$ref": "#/components/schemas/DepartureMasterData"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DepartureMasterData"
+              },
+              {}
+            ]
           },
           "house": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/HouseData"
-            }
+            },
+            "description": ""
           }
-        },
-        "additionalProperties": false
+        }
       },
       "DepartureDeclaration": {
+        "title": "DepartureDeclaration",
         "type": "object",
         "properties": {
           "declarationType": {
@@ -1236,9 +1589,11 @@
             "type": "string"
           },
           "security": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "contentEncoding": "int32"
           },
           "reducedDatasetIndicator": {
             "type": "boolean"
@@ -1253,113 +1608,160 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Authorisation"
-            }
+            },
+            "description": ""
           },
           "representative": {
-            "$ref": "#/components/schemas/Representative"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Representative"
+              },
+              {}
+            ]
           },
           "holderOfTheTransitProcedure": {
-            "$ref": "#/components/schemas/HolderOfTheTransitProcedure"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/HolderOfTheTransitProcedure"
+              },
+              {}
+            ]
           },
           "bindingItinerary": {
             "type": "boolean"
           },
           "customsOfficeOfDeparture": {
-            "$ref": "#/components/schemas/CustomsOfficeOfDeparture"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CustomsOfficeOfDeparture"
+              },
+              {}
+            ]
           },
           "customsOfficeOfTransit": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CustomsOfficeOfTransit"
-            }
+            },
+            "description": ""
           },
           "customsOfficeOfDestination": {
-            "$ref": "#/components/schemas/CustomsOfficeOfDestination"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CustomsOfficeOfDestination"
+              },
+              {}
+            ]
           },
           "customsOfficeOfExitForTransit": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CustomsOfficeOfExitForTransit"
-            }
+            },
+            "description": ""
           },
           "guarantee": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Guarantee"
-            }
+            },
+            "description": ""
           }
-        },
-        "additionalProperties": false
+        }
       },
       "DepartureHouseConsignment": {
+        "title": "DepartureHouseConsignment",
         "type": "object",
         "properties": {
           "previousDocument": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PreviousDocument"
-            }
+            },
+            "description": ""
           },
           "additionalInformation": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AdditionalInformation"
-            }
+            },
+            "description": ""
           },
           "supportingDocument": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SupportingDocument"
-            }
+            },
+            "description": ""
           },
           "departureTransportMeans": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/DepartureTransportMeans"
-            }
+            },
+            "description": ""
           },
           "additionalReference": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AdditionalReference"
-            }
+            },
+            "description": ""
           },
           "transportDocument": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/TransportDocument"
-            }
+            },
+            "description": ""
           },
           "ucr": {
             "type": "string"
           },
           "consignor": {
-            "$ref": "#/components/schemas/Consignor"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Consignor"
+              },
+              {}
+            ]
           },
           "consignee": {
-            "$ref": "#/components/schemas/Consignee"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Consignee"
+              },
+              {}
+            ]
           },
           "additionalSupplyChainActor": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AdditionalSupplyChainActor"
-            }
+            },
+            "description": ""
           },
           "transportCharges": {
-            "$ref": "#/components/schemas/TransportCharges"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TransportCharges"
+              },
+              {}
+            ]
           },
           "countryOfDispatch": {
             "type": "string"
           },
           "grossMass": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
+            "type": [
+              "number",
+              "null"
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "DepartureHouseGoodsItem": {
+        "title": "DepartureHouseGoodsItem",
         "type": "object",
         "properties": {
           "declarationType": {
@@ -1367,52 +1769,68 @@
           },
           "goodsItemNumber": {
             "type": "integer",
-            "format": "int32"
+            "contentEncoding": "int32"
           },
           "previousDocument": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PreviousDocumentItem"
-            }
+            },
+            "description": ""
           },
           "additionalInformation": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AdditionalInformation"
-            }
+            },
+            "description": ""
           },
           "supportingDocument": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SupportingDocument"
-            }
+            },
+            "description": ""
           },
           "additionalReference": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AdditionalReference"
-            }
+            },
+            "description": ""
           },
           "transportDocument": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/TransportDocument"
-            }
+            },
+            "description": ""
           },
           "ucr": {
             "type": "string"
           },
           "consignee": {
-            "$ref": "#/components/schemas/Consignee"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Consignee"
+              },
+              {}
+            ]
           },
           "additionalSupplyChainActor": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AdditionalSupplyChainActor"
-            }
+            },
+            "description": ""
           },
           "transportCharges": {
-            "$ref": "#/components/schemas/TransportCharges"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TransportCharges"
+              },
+              {}
+            ]
           },
           "countryOfDestination": {
             "type": "string"
@@ -1421,14 +1839,16 @@
             "type": "string"
           },
           "netMass": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
+            "type": [
+              "number",
+              "null"
+            ]
           },
           "grossMass": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
+            "type": [
+              "number",
+              "null"
+            ]
           },
           "descriptionOfGoods": {
             "type": "string"
@@ -1437,84 +1857,123 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Packaging"
-            }
+            },
+            "description": ""
           },
           "dangerousGoods": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/DangerousGoods"
-            }
+            },
+            "description": ""
           },
           "cusCode": {
             "type": "string"
           },
           "commodityCode": {
-            "$ref": "#/components/schemas/CommodityCode"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CommodityCode"
+              },
+              {}
+            ]
           },
           "supplementaryUnits": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
+            "type": [
+              "number",
+              "null"
+            ]
           },
           "integration": {
-            "$ref": "#/components/schemas/IntegrationItemData"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/IntegrationItemData"
+              },
+              {}
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "DepartureMasterData": {
+        "title": "DepartureMasterData",
         "type": "object",
         "properties": {
           "previousDocument": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PreviousDocument"
-            }
+            },
+            "description": ""
           },
           "additionalInformation": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AdditionalInformation"
-            }
+            },
+            "description": ""
           },
           "supportingDocument": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SupportingDocument"
-            }
+            },
+            "description": ""
           },
           "additionalReference": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AdditionalReference"
-            }
+            },
+            "description": ""
           },
           "transportDocument": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/TransportDocument"
-            }
+            },
+            "description": ""
           },
           "ucr": {
             "type": "string"
           },
           "consignor": {
-            "$ref": "#/components/schemas/Consignor"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Consignor"
+              },
+              {}
+            ]
           },
           "consignee": {
-            "$ref": "#/components/schemas/Consignee"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Consignee"
+              },
+              {}
+            ]
           },
           "carrier": {
-            "$ref": "#/components/schemas/Carrier"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Carrier"
+              },
+              {}
+            ]
           },
           "additionalSupplyChainActor": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AdditionalSupplyChainActor"
-            }
+            },
+            "description": ""
           },
           "transportCharges": {
-            "$ref": "#/components/schemas/TransportCharges"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TransportCharges"
+              },
+              {}
+            ]
           },
           "countryOfDestination": {
             "type": "string"
@@ -1526,64 +1985,90 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CountryOfRoutingOfConsignment"
-            }
+            },
+            "description": ""
           },
           "placeOfLoading": {
-            "$ref": "#/components/schemas/PlaceOfLoading"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PlaceOfLoading"
+              },
+              {}
+            ]
           },
           "placeOfUnloading": {
-            "$ref": "#/components/schemas/PlaceOfUnloading"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PlaceOfUnloading"
+              },
+              {}
+            ]
           },
           "locationOfGoods": {
-            "$ref": "#/components/schemas/LocationOfGoods"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationOfGoods"
+              },
+              {}
+            ]
           },
           "containerIndicator": {
             "type": "boolean"
           },
           "modeOfTransportAtTheBorder": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "contentEncoding": "int32"
           },
           "inlandModeOfTransport": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "contentEncoding": "int32"
           },
           "transportEquipment": {
             "maxItems": 9999,
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/TransportEquipment"
-            }
+            },
+            "description": ""
           },
           "departureTransportMeans": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/DepartureTransportMeans"
-            }
+            },
+            "description": ""
           },
           "activeBorderTransportMeans": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ActiveBorderTransportMeans"
-            }
+            },
+            "description": ""
           },
           "grossMass": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
+            "type": [
+              "number",
+              "null"
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "DepartureTransportMeans": {
+        "title": "DepartureTransportMeans",
         "type": "object",
         "properties": {
           "typeOfIdentification": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "contentEncoding": "int32"
           },
           "identificationNumber": {
             "type": "string"
@@ -1591,61 +2076,59 @@
           "nationality": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Dossier": {
+        "title": "Dossier",
         "type": "object",
         "properties": {
           "dossierId": {
             "type": "integer",
-            "format": "int32"
+            "contentEncoding": "int32"
           },
           "dossierLineId": {
             "type": "integer",
-            "format": "int32"
+            "contentEncoding": "int32"
           },
           "stockId": {
             "type": "integer",
-            "format": "int32"
+            "contentEncoding": "int32"
           },
           "productId": {
             "type": "integer",
-            "format": "int32"
+            "contentEncoding": "int32"
           },
           "dmsGlobalisationGuid": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "baseValue": {
-            "type": "number",
-            "format": "double"
+            "type": "number"
           },
           "vat": {
-            "type": "number",
-            "format": "double"
+            "type": "number"
           },
           "excise": {
-            "type": "number",
-            "format": "double"
+            "type": "number"
           },
           "importDuties": {
-            "type": "number",
-            "format": "double"
+            "type": "number"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "EconomicOperator": {
+        "title": "EconomicOperator",
         "type": "object",
         "properties": {
           "identificationNumber": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "FoundDeclarations": {
+        "title": "FoundDeclarations",
         "type": "object",
         "properties": {
           "declarationNumber": {
@@ -1660,10 +2143,10 @@
           "status": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "GNSS": {
+        "title": "GNSS",
         "type": "object",
         "properties": {
           "latitude": {
@@ -1672,20 +2155,20 @@
           "longitude": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "GoodsReference": {
+        "title": "GoodsReference",
         "type": "object",
         "properties": {
           "referenceNumber": {
             "type": "integer",
-            "format": "int32"
+            "contentEncoding": "int32"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Guarantee": {
+        "title": "Guarantee",
         "type": "object",
         "properties": {
           "type": {
@@ -1698,12 +2181,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/GuaranteeReference"
-            }
+            },
+            "description": ""
           }
-        },
-        "additionalProperties": false
+        }
       },
       "GuaranteeReference": {
+        "title": "GuaranteeReference",
         "type": "object",
         "properties": {
           "grn": {
@@ -1716,9 +2200,10 @@
             "type": "string"
           },
           "amountToBeCovered": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
+            "type": [
+              "number",
+              "null"
+            ]
           },
           "customsOfficeOfGuarantee": {
             "type": "string"
@@ -1726,14 +2211,19 @@
           "otherGuaranteeReference": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "HolderOfTheTransitProcedure": {
+        "title": "HolderOfTheTransitProcedure",
         "type": "object",
         "properties": {
           "references": {
-            "$ref": "#/components/schemas/RelationReferences"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationReferences"
+              },
+              {}
+            ]
           },
           "name": {
             "type": "string"
@@ -1745,18 +2235,28 @@
             "type": "string"
           },
           "address": {
-            "$ref": "#/components/schemas/HolderOfTheTransitProcedureAddress"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/HolderOfTheTransitProcedureAddress"
+              },
+              {}
+            ]
           },
           "sendMail": {
             "type": "boolean"
           },
           "contactPerson": {
-            "$ref": "#/components/schemas/HolderOfTheTransitProcedureContactPerson"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/HolderOfTheTransitProcedureContactPerson"
+              },
+              {}
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "HolderOfTheTransitProcedureAddress": {
+        "title": "HolderOfTheTransitProcedureAddress",
         "type": "object",
         "properties": {
           "streetAndNumber": {
@@ -1771,14 +2271,19 @@
           "city": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "HolderOfTheTransitProcedureContactPerson": {
+        "title": "HolderOfTheTransitProcedureContactPerson",
         "type": "object",
         "properties": {
           "references": {
-            "$ref": "#/components/schemas/RelationReferences"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationReferences"
+              },
+              {}
+            ]
           },
           "name": {
             "type": "string"
@@ -1789,47 +2294,73 @@
           "emailAddress": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "HouseData": {
+        "title": "HouseData",
         "type": "object",
         "properties": {
           "consignment": {
-            "$ref": "#/components/schemas/DepartureHouseConsignment"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DepartureHouseConsignment"
+              },
+              {}
+            ]
           },
           "goodsItems": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/DepartureHouseGoodsItem"
-            }
+            },
+            "description": ""
           }
-        },
-        "additionalProperties": false
+        }
       },
       "HttpValidationProblemDetails": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/ProblemDetails"
+        "title": "HttpValidationProblemDetails",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": [
+              "string",
+              "null"
+            ]
           },
-          {
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "contentEncoding": "int32"
+          },
+          "detail": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "instance": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "errors": {
             "type": "object",
-            "properties": {
-              "errors": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "additionalProperties": { }
+            "additionalProperties": {}
           }
-        ]
+        },
+        "additionalProperties": {}
       },
       "Ils": {
+        "title": "Ils",
         "type": "object",
         "properties": {
           "company": {
@@ -1849,68 +2380,100 @@
           },
           "dossierId": {
             "type": "integer",
-            "format": "int32"
+            "contentEncoding": "int32"
           },
           "charges": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "$ref": "#/components/schemas/Charges"
             },
-            "nullable": true
+            "description": ""
           },
           "principal": {
-            "$ref": "#/components/schemas/IlsPrincipal"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/IlsPrincipal"
+              },
+              {}
+            ]
           },
           "relationImportDutiesCode": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "IlsPrincipal": {
+        "title": "IlsPrincipal",
         "type": "object",
         "properties": {
           "references": {
-            "$ref": "#/components/schemas/RelationReferences"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationReferences"
+              },
+              {}
+            ]
           },
           "contactPerson": {
-            "$ref": "#/components/schemas/Contact"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Contact"
+              },
+              {}
+            ]
           },
           "sendMail": {
             "type": "boolean"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "IntegrationData": {
+        "title": "IntegrationData",
         "type": "object",
         "properties": {
           "language": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "sendingMode": {
-            "enum": [
-              0,
-              1
-            ],
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "allOf": [
+              {
+                "oneOf": [
+                  {},
+                  {
+                    "$ref": "#/components/schemas/SendingMode"
+                  }
+                ]
+              },
+              {}
+            ]
           },
           "declarationIdToMake": {
-            "type": "integer",
-            "format": "int64",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "contentEncoding": "int64"
           },
           "templateCode": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "printGroup": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "externalReferences": {
             "type": "object",
@@ -1931,49 +2494,71 @@
             "type": "boolean"
           },
           "consolidateType": {
-            "enum": [
-              0,
-              1,
-              2,
-              3
-            ],
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "allOf": [
+              {
+                "oneOf": [
+                  {},
+                  {
+                    "$ref": "#/components/schemas/ConsolidateType"
+                  }
+                ]
+              },
+              {}
+            ]
           },
           "principal": {
-            "$ref": "#/components/schemas/CustomsPrincipal"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CustomsPrincipal"
+              },
+              {}
+            ]
           },
           "control": {
-            "$ref": "#/components/schemas/Control"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Control"
+              },
+              {}
+            ]
           },
           "relationGroup": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "commercialReference": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "terminal": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Terminal"
-            }
+            },
+            "description": ""
           },
           "emergencyId": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "remarks": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "variableFields": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/VariableField"
-            }
+            },
+            "description": ""
           },
           "procedureType": {
             "type": "string"
@@ -1997,23 +2582,33 @@
             "type": "string"
           },
           "ils": {
-            "$ref": "#/components/schemas/Ils"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Ils"
+              },
+              {}
+            ]
           },
           "transportDateTime": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "contentEncoding": "date-time"
           },
           "automaticSendDateTime": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "contentEncoding": "date-time"
           },
           "attachment": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Attachment"
-            }
+            },
+            "description": ""
           },
           "guaranteeUserAccessCode": {
             "type": "string"
@@ -2021,54 +2616,75 @@
           "traderAtDestinationCode": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "IntegrationItemData": {
+        "title": "IntegrationItemData",
         "type": "object",
         "properties": {
           "articleSequenceNumber": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "contentEncoding": "int32"
           },
           "externalReferences": {
-            "type": "object",
+            "type": [
+              "object",
+              "null"
+            ],
             "additionalProperties": {
               "type": "string"
-            },
-            "nullable": true
+            }
           },
           "templateCode": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "variableFields": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/VariableField"
-            }
+            },
+            "description": ""
           },
           "dossier": {
-            "$ref": "#/components/schemas/Dossier"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Dossier"
+              },
+              {}
+            ]
           },
           "consolidationSplit": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "LocationOfGoods": {
+        "title": "LocationOfGoods",
         "type": "object",
         "properties": {
           "internalReference": {
             "maxLength": 36,
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "address": {
-            "$ref": "#/components/schemas/LocationOfGoodsAddress"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationOfGoodsAddress"
+              },
+              {}
+            ]
           },
           "unlocode": {
             "type": "string"
@@ -2080,13 +2696,28 @@
             "type": "string"
           },
           "customsOffice": {
-            "$ref": "#/components/schemas/CustomsOffice"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CustomsOffice"
+              },
+              {}
+            ]
           },
           "gnss": {
-            "$ref": "#/components/schemas/GNSS"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GNSS"
+              },
+              {}
+            ]
           },
           "economicOperator": {
-            "$ref": "#/components/schemas/EconomicOperator"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EconomicOperator"
+              },
+              {}
+            ]
           },
           "authorisationNumber": {
             "type": "string"
@@ -2095,15 +2726,25 @@
             "type": "string"
           },
           "contactPerson": {
-            "$ref": "#/components/schemas/LocationOfGoodsContactPerson"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationOfGoodsContactPerson"
+              },
+              {}
+            ]
           },
           "postcodeAddress": {
-            "$ref": "#/components/schemas/PostcodeAddress"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PostcodeAddress"
+              },
+              {}
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "LocationOfGoodsAddress": {
+        "title": "LocationOfGoodsAddress",
         "type": "object",
         "properties": {
           "streetAndNumber": {
@@ -2118,14 +2759,19 @@
           "country": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "LocationOfGoodsContactPerson": {
+        "title": "LocationOfGoodsContactPerson",
         "type": "object",
         "properties": {
           "references": {
-            "$ref": "#/components/schemas/RelationReferences"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationReferences"
+              },
+              {}
+            ]
           },
           "name": {
             "type": "string"
@@ -2136,10 +2782,10 @@
           "emailAddress": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Packaging": {
+        "title": "Packaging",
         "type": "object",
         "properties": {
           "typeOfPackages": {
@@ -2147,15 +2793,15 @@
           },
           "numberOfPackages": {
             "type": "integer",
-            "format": "int32"
+            "contentEncoding": "int32"
           },
           "shippingMarks": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "PlaceOfLoading": {
+        "title": "PlaceOfLoading",
         "type": "object",
         "properties": {
           "unlocode": {
@@ -2167,10 +2813,10 @@
           "location": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "PlaceOfUnloading": {
+        "title": "PlaceOfUnloading",
         "type": "object",
         "properties": {
           "unlocode": {
@@ -2182,10 +2828,10 @@
           "location": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "PostcodeAddress": {
+        "title": "PostcodeAddress",
         "type": "object",
         "properties": {
           "postcode": {
@@ -2197,10 +2843,10 @@
           "country": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "PreviousDocument": {
+        "title": "PreviousDocument",
         "type": "object",
         "properties": {
           "referenceNumber": {
@@ -2212,10 +2858,10 @@
           "complementOfInformation": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "PreviousDocumentItem": {
+        "title": "PreviousDocumentItem",
         "type": "object",
         "properties": {
           "referenceNumber": {
@@ -2225,101 +2871,144 @@
             "type": "string"
           },
           "typeOfPackages": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "numberOfPackages": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "contentEncoding": "int32"
           },
           "measurementUnitAndQualifier": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "quantity": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
+            "type": [
+              "number",
+              "null"
+            ]
           },
           "goodsItemIdentifier": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "contentEncoding": "int32"
           },
           "complementOfInformation": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "ProblemDetails": {
+        "title": "ProblemDetails",
         "type": "object",
         "properties": {
           "type": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "title": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "status": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "contentEncoding": "int32"
           },
           "detail": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "instance": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
-        "additionalProperties": { }
+        "additionalProperties": {}
       },
       "RelationReferences": {
+        "title": "RelationReferences",
         "type": "object",
         "properties": {
           "internal": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "external": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Representative": {
+        "title": "Representative",
         "type": "object",
         "properties": {
           "references": {
-            "$ref": "#/components/schemas/RelationReferences"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationReferences"
+              },
+              {}
+            ]
           },
           "identificationNumber": {
             "type": "string"
           },
           "status": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "contentEncoding": "int32"
           },
           "contactPerson": {
-            "$ref": "#/components/schemas/RepresentativeContactPerson"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RepresentativeContactPerson"
+              },
+              {}
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "RepresentativeContactPerson": {
+        "title": "RepresentativeContactPerson",
         "type": "object",
         "properties": {
           "references": {
-            "$ref": "#/components/schemas/RelationReferences"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationReferences"
+              },
+              {}
+            ]
           },
           "name": {
             "type": "string"
@@ -2330,39 +3019,41 @@
           "emailAddress": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Seal": {
+        "title": "Seal",
         "type": "object",
         "properties": {
           "identifier": {
             "maxLength": 20,
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "SendOptions": {
+        "title": "SendOptions",
         "type": "object",
         "properties": {
           "sendingMode": {
-            "enum": [
-              0,
-              1
-            ],
-            "type": "integer",
-            "format": "int32"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SendingMode"
+              },
+              {}
+            ]
           },
           "scheduleOn": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "contentEncoding": "date-time"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "SupportingDocument": {
+        "title": "SupportingDocument",
         "type": "object",
         "properties": {
           "referenceNumber": {
@@ -2372,42 +3063,55 @@
             "type": "string"
           },
           "documentLineItemNumber": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "contentEncoding": "int32"
           },
           "complementOfInformation": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Terminal": {
+        "title": "Terminal",
         "type": "object",
         "properties": {
           "terminalCode": {
             "type": "string"
           },
           "isFerry": {
-            "type": "boolean",
-            "nullable": true
+            "type": [
+              "boolean",
+              "null"
+            ]
           },
           "bookingReference": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "carrierType": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
-        },
-        "additionalProperties": false
+        }
       },
       "TraderAtDestination": {
+        "title": "TraderAtDestination",
         "type": "object",
         "properties": {
           "references": {
-            "$ref": "#/components/schemas/RelationReferences"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationReferences"
+              },
+              {}
+            ]
           },
           "name": {
             "type": "string"
@@ -2418,19 +3122,19 @@
           "communicationLanguageAtDestination": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "TransportCharges": {
+        "title": "TransportCharges",
         "type": "object",
         "properties": {
           "methodOfPayment": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "TransportDocument": {
+        "title": "TransportDocument",
         "type": "object",
         "properties": {
           "referenceNumber": {
@@ -2439,10 +3143,10 @@
           "type": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "TransportEquipment": {
+        "title": "TransportEquipment",
         "type": "object",
         "properties": {
           "containerIdentificationNumber": {
@@ -2454,23 +3158,25 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/GoodsReference"
-            }
+            },
+            "description": ""
           },
           "numberOfSeals": {
             "type": "integer",
-            "format": "int32"
+            "contentEncoding": "int32"
           },
           "seals": {
             "maxItems": 99,
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Seal"
-            }
+            },
+            "description": ""
           }
-        },
-        "additionalProperties": false
+        }
       },
       "VariableField": {
+        "title": "VariableField",
         "type": "object",
         "properties": {
           "templateCode": {
@@ -2482,8 +3188,25 @@
           "value": {
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
+      },
+      "ConsolidateType": {
+        "title": "ConsolidateType",
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer"
+      },
+      "SendingMode": {
+        "title": "SendingMode",
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer"
       }
     },
     "securitySchemes": {
@@ -2491,7 +3214,6 @@
         "type": "oauth2",
         "flows": {
           "clientCredentials": {
-            "authorizationUrl": "https://localhost:5002/connect/authorize",
             "tokenUrl": "https://localhost:5002/connect/token",
             "scopes": {
               "nl:ncts:integration": "basic acces to integration api"
@@ -2500,5 +3222,16 @@
         }
       }
     }
-  }
+  },
+  "security": [],
+  "tags": [
+    {
+      "name": "Batch",
+      "description": ""
+    },
+    {
+      "name": "Declarations",
+      "description": ""
+    }
+  ]
 }

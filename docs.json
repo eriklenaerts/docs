@@ -86,29 +86,28 @@
                 "pages": ["classic/api/introduction"]
               },
               {
-                "group": "API reference",
-                "openapi": "classic/api/openapi.json",
-                "pages": [
-                  "classic/api/endpoint/create",
-                  "classic/api/endpoint/get",
-                  "classic/api/endpoint/webhook",
-                  "classic/api/endpoint/delete"
-                ]
+                "group": "AES API",
+                "openapi": "classic/api/aes.json"
               },
               {
-                "group": "API reference",
-                "openapi": "classic/api/openapi.json",
-                "pages": [
-                  "overview",
-                  "authentication",
-                  "GET /plants",
-                  "POST /plants",
-                  {
-                    "group": "Products",
-                    "openapi": "classic/api/openapi.json",
-                    "pages": ["GET /plants", "POST /plants"]
-                  }
-                ]
+                "group": "iDMS API",
+                "openapi": "classic/api/idms.json"
+              },
+              {
+                "group": "DMS API",
+                "openapi": "classic/api/dms.json"
+              },
+              {
+                "group": "LUCCS API",
+                "openapi": "classic/api/luccs.json"
+              },
+              {
+                "group": "NL NCTS API",
+                "openapi": "classic/api/nl-ncts.json"
+              },
+              {
+                "group": "BE NCTS API",
+                "openapi": "classic/api/be-ncts.json"
               }
             ]
           }
