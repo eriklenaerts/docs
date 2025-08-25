@@ -1,0 +1,3238 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Customs LUCCS Integration API",
+    "version": "v1"
+  },
+  "paths": {
+    "/batch/imports/{reference}": {
+      "put": {
+        "tags": [
+          "Batch"
+        ],
+        "summary": "Upsert LUCCS Import data",
+        "description": "Add or update data for LUCCS Import. Data will be imported into StreamLiner by the batch-processor.",
+        "operationId": "batch-import",
+        "parameters": [
+          {
+            "name": "reference",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Tenant-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Import"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "headers": {
+              "Location": {
+                "description": "The location where you can monitor the status op the batchprocessor job"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/batch/exports/{reference}": {
+      "put": {
+        "tags": [
+          "Batch"
+        ],
+        "summary": "Upsert LUCCS Export data",
+        "description": "Add or update data for LUCCS Export. Data will be imported into StreamLiner by the batch-processor.",
+        "operationId": "batch-export",
+        "parameters": [
+          {
+            "name": "reference",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Tenant-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Export"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "headers": {
+              "Location": {
+                "description": "The location where you can monitor the status op the batchprocessor job"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/batch/feedback/{id}": {
+      "get": {
+        "tags": [
+          "Batch"
+        ],
+        "summary": "Get batch processing feedback",
+        "description": "Get feedback on the processing state of the upserted data by the batch-processor.",
+        "operationId": "batch-feedback",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "X-Tenant-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchJobFeedback"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/declarations": {
+      "get": {
+        "tags": [
+          "Declarations"
+        ],
+        "summary": "Find LUCCS declaration",
+        "description": "Find an LUCCS declaration by company code or reference number",
+        "operationId": "declarations-find",
+        "parameters": [
+          {
+            "name": "reference",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Tenant-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FoundDeclarations"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/declarations/{declarationNumber}/feedback": {
+      "get": {
+        "tags": [
+          "Declarations"
+        ],
+        "summary": "Get declaration feedback",
+        "operationId": "declarations-feedback",
+        "parameters": [
+          {
+            "name": "declarationNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Tenant-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DeclarationFeedback"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/declarations/{declarationNumber}/attachments": {
+      "post": {
+        "tags": [
+          "Declarations"
+        ],
+        "summary": "Upload attachment",
+        "description": "Attach a file to a declaration.",
+        "operationId": "declarations-add-attachment",
+        "parameters": [
+          {
+            "name": "declarationNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Disposition",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Attachment-Type",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Attachment-Reference",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Attachment-Date",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "X-Tenant-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/declarations/{declarationNumber}/submit": {
+      "put": {
+        "tags": [
+          "Declarations"
+        ],
+        "summary": "Send LUCCS declaration to customs",
+        "operationId": "declarations-send-declaration",
+        "parameters": [
+          {
+            "name": "declarationNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Tenant-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendOptions"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/declarations/{declarationNumber}/presentation-notification": {
+      "put": {
+        "tags": [
+          "Declarations"
+        ],
+        "summary": "Send LUCCS presentation notification to customs",
+        "operationId": "declarations-send-presentation",
+        "parameters": [
+          {
+            "name": "declarationNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Tenant-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendOptions"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/declarations/{declarationNumber}/invalidation": {
+      "put": {
+        "tags": [
+          "Declarations"
+        ],
+        "summary": "Send LUCCS invalidation request to customs",
+        "operationId": "declarations-send-invalidation",
+        "parameters": [
+          {
+            "name": "declarationNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Tenant-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendOptions"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ActiveBorderTransportMeans": {
+        "type": "object",
+        "properties": {
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          },
+          "typeOfIdentification": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nationality": {
+            "maxLength": 2,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdditionalFiscalReference": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "$ref": "#/components/schemas/RelationReferences"
+          },
+          "vatIdentificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          },
+          "role": {
+            "maxLength": 3,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdditionalInformation": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 5,
+            "type": "string"
+          },
+          "text": {
+            "maxLength": 512,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdditionalReference": {
+        "type": "object",
+        "properties": {
+          "referenceNumber": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "type": {
+            "maxLength": 4,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdditionalSupplyChainActor": {
+        "type": "object",
+        "properties": {
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          },
+          "role": {
+            "maxLength": 3,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdditionsAndDeductions": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currency": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ArrivalTransportMeans": {
+        "type": "object",
+        "properties": {
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          },
+          "typeOfIdentification": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Authorisation": {
+        "type": "object",
+        "properties": {
+          "referenceNumber": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "type": {
+            "maxLength": 4,
+            "type": "string"
+          },
+          "holderOfTheAuthorisation": {
+            "maxLength": 17,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "BatchJobFeedback": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "startedOnDate": {
+            "type": "string"
+          },
+          "endedOnDate": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Buyer": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "$ref": "#/components/schemas/RelationReferences"
+          },
+          "name": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/BuyerAddress"
+          }
+        },
+        "additionalProperties": false
+      },
+      "BuyerAddress": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "country": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "streetAndNumber": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "postCode": {
+            "maxLength": 17,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Carrier": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "$ref": "#/components/schemas/RelationReferences"
+          },
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Charges": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommodityCode": {
+        "type": "object",
+        "properties": {
+          "harmonizedSystemSubHeadingCode": {
+            "maxLength": 6,
+            "type": "string"
+          },
+          "combinedNomenclatureCode": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "taricCode": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "taricAdditionalCode": {
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "nationalAdditionalCode": {
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Consignee": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "$ref": "#/components/schemas/RelationReferences"
+          },
+          "name": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/ConsigneeAddress"
+          },
+          "contactPerson": {
+            "$ref": "#/components/schemas/Contact"
+          },
+          "sendMail": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ConsigneeAddress": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "country": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "streetAndNumber": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "postCode": {
+            "maxLength": 17,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Consignor": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "$ref": "#/components/schemas/RelationReferences"
+          },
+          "name": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/ConsignorAddress"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ConsignorAddress": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "country": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "streetAndNumber": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "postCode": {
+            "maxLength": 17,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Contact": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "$ref": "#/components/schemas/RelationReferences"
+          },
+          "name": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "phoneNumber": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "emailAddress": {
+            "maxLength": 256,
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Control": {
+        "type": "object",
+        "properties": {
+          "packages": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "grossmass": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "netmass": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "commodityValue": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "transportCost": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "insuranceCost": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "euInlandCost": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "vatCharges": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "deductableCharges": {
+            "$ref": "#/components/schemas/Money"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CountryOfRoutingOfConsignment": {
+        "type": "object",
+        "properties": {
+          "country": {
+            "maxLength": 2,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomsOffice": {
+        "type": "object",
+        "properties": {
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomsOfficeOfExit": {
+        "type": "object",
+        "properties": {
+          "referenceNumber": {
+            "maxLength": 8,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomsOfficeOfExport": {
+        "type": "object",
+        "properties": {
+          "referenceNumber": {
+            "maxLength": 8,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomsOfficeOfPresentation": {
+        "type": "object",
+        "properties": {
+          "referenceNumber": {
+            "maxLength": 8,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomsPrincipal": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "$ref": "#/components/schemas/RelationReferences"
+          },
+          "contactPerson": {
+            "$ref": "#/components/schemas/Contact"
+          },
+          "sendMail": {
+            "type": "boolean"
+          },
+          "contactPersonExportConfirmation": {
+            "$ref": "#/components/schemas/Contact"
+          },
+          "sendMailExportConfirmation": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DangerousGoods": {
+        "type": "object",
+        "properties": {
+          "unNumber": {
+            "maxLength": 4,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Declarant": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "$ref": "#/components/schemas/RelationReferences"
+          },
+          "name": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/DeclarantAddress"
+          },
+          "contactPerson": {
+            "$ref": "#/components/schemas/DeclarantContact"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeclarantAddress": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "country": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "streetAndNumber": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "postCode": {
+            "maxLength": 17,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeclarantContact": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "$ref": "#/components/schemas/RelationReferences"
+          },
+          "name": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "phoneNumber": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "emailAddress": {
+            "maxLength": 256,
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Declaration": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "number": {
+            "type": "string"
+          },
+          "reference": {
+            "type": "string",
+            "nullable": true
+          },
+          "company": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "mrn": {
+            "type": "string",
+            "nullable": true
+          },
+          "lrn": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeclarationFeedback": {
+        "type": "object",
+        "properties": {
+          "declaration": {
+            "$ref": "#/components/schemas/Declaration"
+          },
+          "responses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeclarationFeedbackResponse"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeclarationFeedbackResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeferredPayment": {
+        "type": "object",
+        "properties": {
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeliveryTerms": {
+        "type": "object",
+        "properties": {
+          "incotermCode": {
+            "maxLength": 3,
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "unlocode": {
+            "maxLength": 17,
+            "type": "string"
+          },
+          "location": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "country": {
+            "maxLength": 2,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DepartureTransportMeans": {
+        "type": "object",
+        "properties": {
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          },
+          "typeOfIdentification": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nationality": {
+            "maxLength": 2,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DutiesAndTaxes": {
+        "type": "object",
+        "properties": {
+          "taxType": {
+            "maxLength": 3,
+            "type": "string"
+          },
+          "methodOfPayment": {
+            "maxLength": 1,
+            "type": "string"
+          },
+          "payableTaxAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "taxBase": {
+            "maxItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaxBase"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "EconomicOperator": {
+        "type": "object",
+        "properties": {
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Export": {
+        "type": "object",
+        "properties": {
+          "$type": {
+            "type": "string",
+            "readOnly": true
+          },
+          "integration": {
+            "$ref": "#/components/schemas/IntegrationData"
+          },
+          "declaration": {
+            "$ref": "#/components/schemas/ExportDeclaration"
+          },
+          "goodsShipment": {
+            "$ref": "#/components/schemas/ExportGoodsShipment"
+          },
+          "goodsItems": {
+            "maxItems": 9999,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExportGoodsItem"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ExportDeclaration": {
+        "type": "object",
+        "properties": {
+          "declarationType": {
+            "maxLength": 5,
+            "type": "string"
+          },
+          "additionalDeclarationType": {
+            "maxLength": 1,
+            "type": "string"
+          },
+          "specificCircumstancesIndicator": {
+            "maxLength": 3,
+            "type": "string"
+          },
+          "security": {
+            "maxLength": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "deferredPayment": {
+            "maxItems": 9,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeferredPayment"
+            }
+          },
+          "authorisation": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Authorisation"
+            }
+          },
+          "exporter": {
+            "$ref": "#/components/schemas/Exporter"
+          },
+          "declarant": {
+            "$ref": "#/components/schemas/Declarant"
+          },
+          "representative": {
+            "$ref": "#/components/schemas/Representative"
+          },
+          "invoiceCurrency": {
+            "maxLength": 3,
+            "type": "string"
+          },
+          "totalAmountInvoiced": {
+            "type": "number",
+            "format": "double"
+          },
+          "internalCurrencyUnit": {
+            "maxLength": 3,
+            "type": "string"
+          },
+          "presentationOfGoods": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "customsOfficeOfExit": {
+            "$ref": "#/components/schemas/CustomsOfficeOfExit"
+          },
+          "customsOfficeOfExport": {
+            "$ref": "#/components/schemas/CustomsOfficeOfExport"
+          },
+          "customsOfficeOfPresentation": {
+            "$ref": "#/components/schemas/CustomsOfficeOfPresentation"
+          },
+          "supervisingCustomsOffice": {
+            "$ref": "#/components/schemas/SupervisingCustomsOffice"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ExportGoodsItem": {
+        "type": "object",
+        "properties": {
+          "goodsItemNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "procedure": {
+            "$ref": "#/components/schemas/Procedure"
+          },
+          "additionalProcedures": {
+            "maxItems": 3,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "previousDocuments": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemPreviousDocument"
+            }
+          },
+          "additionalInformation": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalInformation"
+            }
+          },
+          "supportingDocuments": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemSupportingDocument"
+            }
+          },
+          "additionalReferences": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalReference"
+            }
+          },
+          "transportDocuments": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransportDocument"
+            }
+          },
+          "ucr": {
+            "$ref": "#/components/schemas/UCR"
+          },
+          "authorisation": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Authorisation"
+            }
+          },
+          "consignor": {
+            "$ref": "#/components/schemas/Consignor"
+          },
+          "consignee": {
+            "$ref": "#/components/schemas/Consignee"
+          },
+          "additionalSupplyChainActor": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalSupplyChainActor"
+            }
+          },
+          "transportCharges": {
+            "$ref": "#/components/schemas/TransportCharges"
+          },
+          "countryOfDestination": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "countryOfExport": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "countryOfOrigin": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "regionOfDispatch": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "netMass": {
+            "type": "number",
+            "format": "double"
+          },
+          "supplementaryUnits": {
+            "type": "number",
+            "format": "double"
+          },
+          "grossMass": {
+            "type": "number",
+            "format": "double"
+          },
+          "descriptionOfGoods": {
+            "maxLength": 512,
+            "type": "string"
+          },
+          "packaging": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Packaging"
+            }
+          },
+          "dangerousGoods": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DangerousGoods"
+            }
+          },
+          "cusCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "commodityCode": {
+            "$ref": "#/components/schemas/CommodityCode"
+          },
+          "natureOfTransaction": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "statisticalValue": {
+            "type": "number",
+            "format": "double"
+          },
+          "integration": {
+            "$ref": "#/components/schemas/ExportItemIntegration"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ExportGoodsShipment": {
+        "type": "object",
+        "properties": {
+          "previousDocument": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PreviousDocument"
+            }
+          },
+          "additionalInformation": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalInformation"
+            }
+          },
+          "supportingDocument": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SupportingDocument"
+            }
+          },
+          "additionalReference": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalReference"
+            }
+          },
+          "transportDocument": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransportDocument"
+            }
+          },
+          "ucr": {
+            "$ref": "#/components/schemas/UCR"
+          },
+          "warehouse": {
+            "$ref": "#/components/schemas/Warehouse"
+          },
+          "consignor": {
+            "$ref": "#/components/schemas/Consignor"
+          },
+          "consignee": {
+            "$ref": "#/components/schemas/Consignee"
+          },
+          "carrier": {
+            "$ref": "#/components/schemas/Carrier"
+          },
+          "additionalSupplyChainActor": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalSupplyChainActor"
+            }
+          },
+          "deliveryTerms": {
+            "$ref": "#/components/schemas/DeliveryTerms"
+          },
+          "transportCharges": {
+            "$ref": "#/components/schemas/TransportCharges"
+          },
+          "dateOfAcceptance": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "countryOfDestination": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "countryOfExport": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "countriesOfRoutingOfConsignment": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CountryOfRoutingOfConsignment"
+            }
+          },
+          "locationOfGoods": {
+            "$ref": "#/components/schemas/LocationOfGoods"
+          },
+          "grossMass": {
+            "type": "number",
+            "format": "double"
+          },
+          "modeOfTransportAtTheBorder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "inlandModeOfTransport": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "departureTransportMeans": {
+            "maxItems": 999,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DepartureTransportMeans"
+            }
+          },
+          "transportEquipment": {
+            "maxItems": 9999,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransportEquipment"
+            }
+          },
+          "activeBorderTransportMeans": {
+            "$ref": "#/components/schemas/ActiveBorderTransportMeans"
+          },
+          "natureOfTransaction": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ExportItemIntegration": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ItemIntegration"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "amountInvoiced": {
+                "$ref": "#/components/schemas/Money"
+              },
+              "deductableCharges": {
+                "$ref": "#/components/schemas/Money"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Exporter": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "$ref": "#/components/schemas/RelationReferences"
+          },
+          "name": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/ExporterAddress"
+          },
+          "contactPerson": {
+            "$ref": "#/components/schemas/Contact"
+          },
+          "sendMail": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ExporterAddress": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "country": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "streetAndNumber": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "postCode": {
+            "maxLength": 17,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Fiscal": {
+        "type": "object",
+        "properties": {
+          "representativeCode": {
+            "type": "string"
+          },
+          "representativeName": {
+            "type": "string"
+          },
+          "directTransit": {
+            "type": "boolean"
+          },
+          "consigneeCode": {
+            "type": "string"
+          },
+          "consigneeGoods": {
+            "type": "string"
+          },
+          "salesValue": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "salesInvoiceDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "salesValueExchangeRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "salesInvoiceReference": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FoundDeclarations": {
+        "type": "object",
+        "properties": {
+          "declarationNumber": {
+            "type": "string"
+          },
+          "companyCode": {
+            "type": "string"
+          },
+          "reference": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GNSS": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "maxLength": 17,
+            "type": "string"
+          },
+          "longitude": {
+            "maxLength": 17,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GoodsReference": {
+        "type": "object",
+        "properties": {
+          "referenceNumber": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GuaranteeCustoms": {
+        "type": "object",
+        "properties": {
+          "guaranteeType": {
+            "$ref": "#/components/schemas/GuaranteeType"
+          },
+          "guaranteeReferences": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GuaranteeReference"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "GuaranteeReference": {
+        "type": "object",
+        "properties": {
+          "amountToBeCovered": {
+            "type": "number",
+            "format": "double"
+          },
+          "currency": {
+            "maxLength": 3,
+            "type": "string"
+          },
+          "otherGuaranteeReference": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "accessCode": {
+            "maxLength": 4,
+            "type": "string"
+          },
+          "grn": {
+            "maxLength": 24,
+            "type": "string"
+          },
+          "customsOfficeOfGuarantee": {
+            "maxLength": 8,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GuaranteeType": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "maxLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "HttpValidationProblemDetails": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ProblemDetails"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "errors": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "additionalProperties": { }
+          }
+        ]
+      },
+      "Ils": {
+        "type": "object",
+        "properties": {
+          "company": {
+            "type": "string"
+          },
+          "createDossier": {
+            "type": "boolean"
+          },
+          "department": {
+            "type": "string"
+          },
+          "dossierType": {
+            "type": "string"
+          },
+          "subDossierType": {
+            "type": "string"
+          },
+          "dossierId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "charges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Charges"
+            },
+            "nullable": true
+          },
+          "principal": {
+            "$ref": "#/components/schemas/IlsPrincipal"
+          },
+          "relationImportDutiesCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IlsPrincipal": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "$ref": "#/components/schemas/RelationReferences"
+          },
+          "contactPerson": {
+            "$ref": "#/components/schemas/Contact"
+          },
+          "sendMail": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Import": {
+        "type": "object",
+        "properties": {
+          "$type": {
+            "type": "string",
+            "readOnly": true
+          },
+          "integration": {
+            "$ref": "#/components/schemas/IntegrationData"
+          },
+          "declaration": {
+            "$ref": "#/components/schemas/ImportDeclaration"
+          },
+          "goodsShipment": {
+            "$ref": "#/components/schemas/ImportGoodsShipment"
+          },
+          "goodsItems": {
+            "maxItems": 9999,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImportGoodsItem"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ImportDeclaration": {
+        "type": "object",
+        "properties": {
+          "declarationType": {
+            "maxLength": 5,
+            "type": "string"
+          },
+          "additionalDeclarationType": {
+            "maxLength": 1,
+            "type": "string"
+          },
+          "deferredPayment": {
+            "maxItems": 9,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeferredPayment"
+            }
+          },
+          "authorisation": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Authorisation"
+            }
+          },
+          "importer": {
+            "$ref": "#/components/schemas/Importer"
+          },
+          "declarant": {
+            "$ref": "#/components/schemas/Declarant"
+          },
+          "representative": {
+            "$ref": "#/components/schemas/Representative"
+          },
+          "personProvidingAGuarantee": {
+            "$ref": "#/components/schemas/PersonProvidingAGuarantee"
+          },
+          "personPayingTheCustomsDuty": {
+            "$ref": "#/components/schemas/PersonPayingTheCustomsDuty"
+          },
+          "postalCharges": {
+            "$ref": "#/components/schemas/PostalCharges"
+          },
+          "internalCurrencyUnit": {
+            "maxLength": 3,
+            "type": "string",
+            "nullable": true
+          },
+          "customsOfficeOfPresentation": {
+            "$ref": "#/components/schemas/CustomsOfficeOfPresentation"
+          },
+          "supervisingCustomsOffice": {
+            "$ref": "#/components/schemas/SupervisingCustomsOffice"
+          },
+          "guarantee": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GuaranteeCustoms"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ImportGoodsItem": {
+        "type": "object",
+        "properties": {
+          "goodsItemNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "procedure": {
+            "$ref": "#/components/schemas/Procedure"
+          },
+          "additionalProcedures": {
+            "maxItems": 3,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "previousDocuments": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemPreviousDocument"
+            },
+            "nullable": true
+          },
+          "additionalInformation": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalInformation"
+            },
+            "nullable": true
+          },
+          "supportingDocuments": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemSupportingDocument"
+            },
+            "nullable": true
+          },
+          "additionalReferences": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalReference"
+            },
+            "nullable": true
+          },
+          "transportDocuments": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransportDocument"
+            },
+            "nullable": true
+          },
+          "ucr": {
+            "$ref": "#/components/schemas/UCR"
+          },
+          "authorisation": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Authorisation"
+            },
+            "nullable": true
+          },
+          "exporter": {
+            "$ref": "#/components/schemas/Exporter"
+          },
+          "seller": {
+            "$ref": "#/components/schemas/Seller"
+          },
+          "buyer": {
+            "$ref": "#/components/schemas/Buyer"
+          },
+          "additionalSupplyChainActors": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalSupplyChainActor"
+            },
+            "nullable": true
+          },
+          "additionalFiscalReferences": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalFiscalReference"
+            },
+            "nullable": true
+          },
+          "dutiesAndTaxes": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DutiesAndTaxes"
+            },
+            "nullable": true
+          },
+          "additionsAndDeductions": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionsAndDeductions"
+            },
+            "nullable": true
+          },
+          "valuationIndicators": {
+            "$ref": "#/components/schemas/ValuationIndicators"
+          },
+          "itemAmountInvoiced": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "valuationMethod": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "preference": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "countryOfDestination": {
+            "maxLength": 2,
+            "type": "string",
+            "nullable": true
+          },
+          "regionOfDestination": {
+            "maxLength": 35,
+            "type": "string",
+            "nullable": true
+          },
+          "countryOfDispatch": {
+            "maxLength": 2,
+            "type": "string",
+            "nullable": true
+          },
+          "countryOfOrigin": {
+            "maxLength": 2,
+            "type": "string",
+            "nullable": true
+          },
+          "countryOfPreferentialOrigin": {
+            "maxLength": 4,
+            "type": "string",
+            "nullable": true
+          },
+          "netMass": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "supplementaryUnits": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "grossMass": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "descriptionOfGoods": {
+            "maxLength": 512,
+            "type": "string",
+            "nullable": true
+          },
+          "packaging": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Packaging"
+            },
+            "nullable": true
+          },
+          "cusCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "commodityCode": {
+            "$ref": "#/components/schemas/CommodityCode"
+          },
+          "typeOfGoods": {
+            "type": "string",
+            "nullable": true
+          },
+          "quotaOrderNumber": {
+            "maxLength": 6,
+            "type": "string",
+            "nullable": true
+          },
+          "natureOfTransaction": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "statisticalValue": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "integration": {
+            "$ref": "#/components/schemas/ImportItemIntegration"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ImportGoodsShipment": {
+        "type": "object",
+        "properties": {
+          "previousDocument": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PreviousDocument"
+            },
+            "nullable": true
+          },
+          "additionalInformation": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalInformation"
+            },
+            "nullable": true
+          },
+          "supportingDocument": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SupportingDocument"
+            },
+            "nullable": true
+          },
+          "additionalReference": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalReference"
+            },
+            "nullable": true
+          },
+          "transportDocument": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransportDocument"
+            },
+            "nullable": true
+          },
+          "ucr": {
+            "$ref": "#/components/schemas/UCR"
+          },
+          "warehouse": {
+            "$ref": "#/components/schemas/Warehouse"
+          },
+          "exporter": {
+            "$ref": "#/components/schemas/Exporter"
+          },
+          "seller": {
+            "$ref": "#/components/schemas/Seller"
+          },
+          "buyer": {
+            "$ref": "#/components/schemas/Buyer"
+          },
+          "additionalSupplyChainActor": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalSupplyChainActor"
+            },
+            "nullable": true
+          },
+          "additionalFiscalReference": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalFiscalReference"
+            },
+            "nullable": true
+          },
+          "deliveryTerms": {
+            "$ref": "#/components/schemas/DeliveryTerms"
+          },
+          "invoiceCurrency": {
+            "maxLength": 3,
+            "type": "string",
+            "nullable": true
+          },
+          "totalAmountInvoiced": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "valuationIndicators": {
+            "$ref": "#/components/schemas/ValuationIndicators"
+          },
+          "dateOfAcceptance": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "countryOfDestination": {
+            "maxLength": 2,
+            "type": "string",
+            "nullable": true
+          },
+          "regionOfDestination": {
+            "maxLength": 35,
+            "type": "string",
+            "nullable": true
+          },
+          "countryOfDispatch": {
+            "maxLength": 2,
+            "type": "string",
+            "nullable": true
+          },
+          "locationOfGoods": {
+            "$ref": "#/components/schemas/LocationOfGoods"
+          },
+          "grossMass": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "modeOfTransportAtTheBorder": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "inlandModeOfTransport": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "arrivalTransportMeans": {
+            "$ref": "#/components/schemas/ArrivalTransportMeans"
+          },
+          "transportEquipment": {
+            "maxItems": 9999,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransportEquipment"
+            },
+            "nullable": true
+          },
+          "activeBorderTransportMeans": {
+            "$ref": "#/components/schemas/ActiveBorderTransportMeans"
+          },
+          "natureOfTransaction": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ImportItemIntegration": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ItemIntegration"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "statisticalValueAdjustment": {
+                "$ref": "#/components/schemas/Money"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Importer": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "$ref": "#/components/schemas/RelationReferences"
+          },
+          "name": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/ImporterAddress"
+          },
+          "contactPerson": {
+            "$ref": "#/components/schemas/Contact"
+          },
+          "sendMail": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ImporterAddress": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "country": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "streetAndNumber": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "postCode": {
+            "maxLength": 17,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "IntegrationData": {
+        "type": "object",
+        "properties": {
+          "templateCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "printGroup": {
+            "type": "string",
+            "nullable": true
+          },
+          "control": {
+            "$ref": "#/components/schemas/Control"
+          },
+          "principal": {
+            "$ref": "#/components/schemas/CustomsPrincipal"
+          },
+          "language": {
+            "type": "string",
+            "nullable": true
+          },
+          "procedureType": {
+            "type": "string",
+            "nullable": true
+          },
+          "commercialReference": {
+            "type": "string",
+            "nullable": true
+          },
+          "fiscal": {
+            "$ref": "#/components/schemas/Fiscal"
+          },
+          "ils": {
+            "$ref": "#/components/schemas/Ils"
+          },
+          "externalReferences": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "variableFields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VariableField"
+            },
+            "nullable": true
+          },
+          "transportDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "declarationCreatedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "remarks": {
+            "type": "string",
+            "nullable": true
+          },
+          "sendOptions": {
+            "$ref": "#/components/schemas/SendOptions"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ItemIntegration": {
+        "type": "object",
+        "properties": {
+          "externalReferences": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "variableFields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VariableField"
+            },
+            "nullable": true
+          },
+          "supplementaryUnitsCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ItemPreviousDocument": {
+        "type": "object",
+        "properties": {
+          "referenceNumber": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "type": {
+            "maxLength": 4,
+            "type": "string"
+          },
+          "goodsItemIdentifier": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "measurementUnit": {
+            "maxLength": 4,
+            "type": "string"
+          },
+          "numberOfPackages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "typeOfPackages": {
+            "maxLength": 2,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ItemSupportingDocument": {
+        "type": "object",
+        "properties": {
+          "dateOfValidity": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "referenceNumber": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "type": {
+            "maxLength": 4,
+            "type": "string"
+          },
+          "lineItemNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "issuingAuthorityName": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "measurementUnit": {
+            "maxLength": 4,
+            "type": "string"
+          },
+          "currency": {
+            "maxLength": 3,
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LocationAddress": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "country": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "streetAndNumber": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "postCode": {
+            "maxLength": 17,
+            "type": "string"
+          },
+          "houseNumber": {
+            "maxLength": 35,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LocationOfGoods": {
+        "type": "object",
+        "properties": {
+          "internalReference": {
+            "maxLength": 36,
+            "type": "string",
+            "nullable": true
+          },
+          "unlocode": {
+            "maxLength": 17,
+            "type": "string",
+            "nullable": true
+          },
+          "typeOfLocation": {
+            "maxLength": 1,
+            "type": "string",
+            "nullable": true
+          },
+          "gnss": {
+            "$ref": "#/components/schemas/GNSS"
+          },
+          "qualifierOfIdentification": {
+            "maxLength": 1,
+            "type": "string",
+            "nullable": true
+          },
+          "authorizationNumber": {
+            "maxLength": 35,
+            "type": "string",
+            "nullable": true
+          },
+          "additionalIdentifier": {
+            "maxLength": 4,
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "$ref": "#/components/schemas/LocationAddress"
+          },
+          "customsOffice": {
+            "$ref": "#/components/schemas/CustomsOffice"
+          },
+          "contactPerson": {
+            "$ref": "#/components/schemas/LocationOfGoodsContact"
+          },
+          "economicOperator": {
+            "$ref": "#/components/schemas/EconomicOperator"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LocationOfGoodsContact": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "phoneNumber": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "emailAddress": {
+            "maxLength": 256,
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Money": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "format": "double"
+          },
+          "currency": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Packaging": {
+        "type": "object",
+        "properties": {
+          "shippingMarks": {
+            "maxLength": 512,
+            "type": "string"
+          },
+          "numberOfPackages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "typeOfPackages": {
+            "maxLength": 2,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PersonPayingTheCustomsDuty": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "$ref": "#/components/schemas/RelationReferences"
+          },
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PersonProvidingAGuarantee": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "$ref": "#/components/schemas/RelationReferences"
+          },
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PostalCharges": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "maxLength": 3,
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PreviousDocument": {
+        "type": "object",
+        "properties": {
+          "referenceNumber": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "type": {
+            "maxLength": 4,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "Procedure": {
+        "type": "object",
+        "properties": {
+          "requestedProcedure": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "previousProcedure": {
+            "maxLength": 2,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RelationReferences": {
+        "type": "object",
+        "properties": {
+          "internal": {
+            "type": "string",
+            "nullable": true
+          },
+          "external": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Representative": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "$ref": "#/components/schemas/RelationReferences"
+          },
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "contactPerson": {
+            "$ref": "#/components/schemas/RepresentativeContact"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RepresentativeContact": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "$ref": "#/components/schemas/RelationReferences"
+          },
+          "name": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "phoneNumber": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "emailAddress": {
+            "maxLength": 256,
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Seal": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "maxLength": 20,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Seller": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "$ref": "#/components/schemas/RelationReferences"
+          },
+          "name": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "identificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/SellerAddress"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SellerAddress": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "country": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "streetAndNumber": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "postCode": {
+            "maxLength": 17,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SendOptions": {
+        "type": "object",
+        "properties": {
+          "sendingMode": {
+            "enum": [
+              0,
+              1
+            ],
+            "type": "integer",
+            "format": "int32"
+          },
+          "scheduleOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SupervisingCustomsOffice": {
+        "type": "object",
+        "properties": {
+          "referenceNumber": {
+            "maxLength": 8,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SupportingDocument": {
+        "type": "object",
+        "properties": {
+          "dateOfValidity": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "referenceNumber": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "type": {
+            "maxLength": 4,
+            "type": "string"
+          },
+          "documentLineItemNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "issuingAuthorityName": {
+            "maxLength": 70,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TaxBase": {
+        "type": "object",
+        "properties": {
+          "taxAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "measurementUnit": {
+            "maxLength": 4,
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TransportCharges": {
+        "type": "object",
+        "properties": {
+          "methodOfPayment": {
+            "maxLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TransportDocument": {
+        "type": "object",
+        "properties": {
+          "referenceNumber": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "type": {
+            "maxLength": 4,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TransportEquipment": {
+        "type": "object",
+        "properties": {
+          "containerIdentificationNumber": {
+            "maxLength": 17,
+            "type": "string"
+          },
+          "goodsReferences": {
+            "maxItems": 9999,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GoodsReference"
+            }
+          },
+          "numberOfSeals": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seals": {
+            "maxItems": 99,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Seal"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "UCR": {
+        "type": "object",
+        "properties": {
+          "referenceNumber": {
+            "maxLength": 35,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ValuationIndicators": {
+        "type": "object",
+        "properties": {
+          "partyRelationship": {
+            "type": "boolean"
+          },
+          "restrictionsForBuyer": {
+            "type": "boolean"
+          },
+          "saleOrPriceWithConditions": {
+            "type": "boolean"
+          },
+          "saleSubjectToArrangement": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "VariableField": {
+        "type": "object",
+        "properties": {
+          "templateCode": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Warehouse": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "type": {
+            "maxLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "authorizationUrl": "https://localhost:5002/connect/authorize",
+            "tokenUrl": "https://localhost:5002/connect/token",
+            "scopes": {
+              "lu:luccs:integration": "basic acces to integration api"
+            }
+          }
+        }
+      }
+    }
+  }
+}
